@@ -1,6 +1,7 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QWidget
 from sudoku_database_cursor import SudokuDatabaseCursor
+from .selected_sudoku_leaders_window import SelectedSudokuLeadersWindow
 
 
 class LeadersWindowUiForm(object):
@@ -63,12 +64,28 @@ class LeadersWindow(LeadersWindowUiForm, QWidget):
     def __init__(self, parent_window):
         super(LeadersWindowUiForm, self).__init__()
         self.parent_window = parent_window
+        self.child_window = None
         self.setupUi(self)
 
         self.db_cursor = SudokuDatabaseCursor()
+
+        # Подключаем кнопку "В главное меню"
+        self.btn_back.clicked.connect(self.btn_back_clicked)
+
+        # Подключаем кнопку "Посмотреть ранг"
+        self.btn_show_rang.clicked.connect(self.btn_show_rang_clicked)
+
+    def btn_back_clicked(self):
+        self.close()
+
+    def btn_show_rang_clicked(self):
+        self.child_window = SelectedSudokuLeadersWindow(self)
+        self.child_window.show()
 
     def closeEvent(self, a0: QtGui.QCloseEvent) -> None:
         # TODO
         # Эту фу-ию потом надо убрать,
         # ведь нам не всегда надо будет возвращаться к начальномк окну
+        if self.child_window is not None:
+            self.child_window.close()
         self.parent_window.show()

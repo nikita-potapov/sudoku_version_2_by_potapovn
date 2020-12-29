@@ -69,9 +69,9 @@ def solve(x_set, y_set, solution):
             solution.pop()
 
 
-def select(x_set, y_set, r):
+def select(x_set, y_set, row):
     cols = []
-    for j in y_set[r]:
+    for j in y_set[row]:
         for i in x_set[j]:
             for k in y_set[i]:
                 if k != j:
@@ -80,8 +80,8 @@ def select(x_set, y_set, r):
     return cols
 
 
-def deselect(x_set, y_set, r, cols):
-    for j in reversed(y_set[r]):
+def deselect(x_set, y_set, row, cols):
+    for j in reversed(y_set[row]):
         x_set[j] = cols.pop()
         for i in x_set[j]:
             for k in y_set[i]:
@@ -92,15 +92,19 @@ def deselect(x_set, y_set, r, cols):
 class Sudoku:
     """Класс матрицы для судоку"""
 
-    def __init__(self, size=3, level=None, timestamp=None,
-                 solved_sudoku=None, problem_sudoku=None, animate_function=None):
+    def __init__(self, size=3, level=None,
+                 solved_sudoku=None, problem_sudoku=None,
+                 animate_function=None, database_id=None,
+                 current_sudoku_state=None, game_time=None):
         """Параметр size задает размер квадратов, на которые разбивается матрица,
         то есть конечная матрица будет иметь размер size ** 2 на size ** 2"""
+        self.game_time = game_time
+        self.current_sudoku_state = current_sudoku_state
+        self.database_id = database_id
         self.animate_function = animate_function
         self.size = size
         self.solved_sudoku = solved_sudoku
         self.problem_sudoku = problem_sudoku
-        self.timestamp = timestamp
         self.difficult_level_name = level
         self.constant = True if self.solved_sudoku else False
 
@@ -162,7 +166,7 @@ class Sudoku:
         self.change_row_districts()
         self.transpose_matrix()
 
-    def random_mix_matrix(self, k=10):
+    def random_mix_matrix(self, k=20):
         """Совершает k случайных действий над матрицей,
          не приводящих к недопустимым позициям"""
         mix_functions = [self.transpose_matrix,
@@ -274,7 +278,6 @@ class Sudoku:
                   'Current:', current_difficult, 'Attempt', attempts)
 
             self.problem_sudoku = problem_sudoku
-            self.timestamp = datetime.datetime.timestamp(datetime.datetime.now())
         else:
             problem_sudoku = copy.deepcopy(self.problem_sudoku)
 
@@ -288,12 +291,27 @@ class Sudoku:
         """Возвращает копию текущей незаполненной матрицы"""
         return copy.deepcopy(self.problem_sudoku)
 
-    def get_timestamp(self):
-        return self.timestamp
-
     def get_difficult_level_name(self):
+        """Возвращает название уровня сложнсоти"""
         return self.difficult_level_name
 
     def get_size(self):
         """Возвращает размер самого маленького квадрата судоку"""
         return self.size
+
+    def get_database_id(self):
+        """Возвращает номер записи этого судоку в базе данных"""
+        return self.database_id
+
+    def get_current_sudoku_state(self):
+        """Возвращает текущее состояние судоку у игрока"""
+        return self.current_sudoku_state
+
+    def set_current_state(self, matrix):
+        self.current_sudoku_state = copy.deepcopy(matrix)
+
+    def get_game_time(self):
+        return self.game_time
+
+    def set_game_time(self, game_time):
+        self.game_time = game_time
