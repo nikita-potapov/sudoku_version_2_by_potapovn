@@ -53,6 +53,7 @@ class SavedGamesWindow(SavedGamesWindowUiForm, QWidget):
     def __init__(self, parent_window):
         super(SavedGamesWindow, self).__init__()
         self.parent_window = parent_window
+        self.child_window = None
         self.setupUi(self)
 
         self.db_cursor = SudokuDatabaseCursor()
@@ -123,7 +124,8 @@ class SavedGamesWindow(SavedGamesWindowUiForm, QWidget):
             sudoku_database_id = int(saved_game[3])
             sudoku = self.db_cursor.get_sudoku(sudoku_database_id)
             sudoku.set_game_time(int(saved_game[2]))
-            sudoku.set_current_state(self.db_cursor.convert_str_to_list(saved_game[-1]))
+            sudoku.set_current_sudoku_state(self.db_cursor.convert_str_to_list(saved_game[-1]))
+
             self.child_window = GameWindow(self.parent_window, sudoku)
             self.hide()
             self.child_window.show()

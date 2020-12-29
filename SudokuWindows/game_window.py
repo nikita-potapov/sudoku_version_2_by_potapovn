@@ -67,7 +67,10 @@ class GameWindow(GameWindowUiForm, QWidget):
         if SHOW_SUDOKU_SOLVED_MATRIX:
             sudoku.show_solved_matrix()
 
-        self.current_sudoku_state = sudoku.get_problem_matrix()
+        current_sudoku_matrix = sudoku.get_current_sudoku_state()
+        if current_sudoku_matrix is None:
+            current_sudoku_matrix = sudoku.get_problem_matrix()
+        self.current_sudoku_state = current_sudoku_matrix
         self.sudoku_size = sudoku.get_size()
         self.initialize_sudoku_interface()
         self.update_sudoku_interface()
@@ -102,7 +105,7 @@ class GameWindow(GameWindowUiForm, QWidget):
     def save_game(self):
         if self.db_cursor is None:
             self.db_cursor = SudokuDatabaseCursor()
-        self.sudoku.set_current_state(self.current_sudoku_state)
+        self.sudoku.set_current_sudoku_state(self.current_sudoku_state)
         self.sudoku.set_game_time(self.game_time)
         self.db_cursor.add_game_save(self.sudoku)
 

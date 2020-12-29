@@ -4,6 +4,7 @@ import copy
 
 from settings import DIFFICULT_LEVELS
 from settings import SUDOKU_GENERATION_MAX_ATTEMPTS
+from settings import SHOW_SUDOKU_GENERATION_INFORMATION
 
 
 def solve_sudoku(size, grid):
@@ -272,9 +273,9 @@ class Sudoku:
                     current_difficult = maximum_difficult
                     break
 
-            # TODO
-            print('Max Target:', difficult_max, 'Max Founded:', maximum_difficult,
-                  'Current:', current_difficult, 'Attempt', attempts)
+            if SHOW_SUDOKU_GENERATION_INFORMATION:
+                print('Max Target:', difficult_max, 'Max Founded:', maximum_difficult,
+                      'Current:', current_difficult, 'Attempt', attempts)
 
             self.problem_sudoku = problem_sudoku
         else:
@@ -306,7 +307,7 @@ class Sudoku:
         """Возвращает текущее состояние судоку у игрока"""
         return self.current_sudoku_state
 
-    def set_current_state(self, matrix):
+    def set_current_sudoku_state(self, matrix):
         self.current_sudoku_state = copy.deepcopy(matrix)
 
     def get_game_time(self):

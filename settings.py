@@ -20,6 +20,8 @@ DIFFICULT_LEVELS = {
 }
 # Максимальное количество попыток генерации судоку при пересечении минимальной сложности
 SUDOKU_GENERATION_MAX_ATTEMPTS = 1000
+# Показывать информацию при генерации судоку в консоли
+SHOW_SUDOKU_GENERATION_INFORMATION = True
 
 PROGRAM_VERSION = 1.0
 
