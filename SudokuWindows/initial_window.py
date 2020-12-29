@@ -6,12 +6,16 @@ from .saved_window import SavedGamesWindow
 from .game_window import GameWindow
 from sudoku_interface import Sudoku
 from sudoku_database_cursor import SudokuDatabaseCursor
+from settings import ICON_PATH
 
 
 class InitialWindowUiForm(object):
     def setupUi(self, Form):
         Form.setObjectName("Form")
         Form.resize(380, 540)
+
+        Form.setWindowIcon(QtGui.QIcon(ICON_PATH))
+
         self.horizontalLayout = QtWidgets.QHBoxLayout(Form)
         self.horizontalLayout.setObjectName("horizontalLayout")
         spacerItem = QtWidgets.QSpacerItem(122, 20, QtWidgets.QSizePolicy.Expanding,

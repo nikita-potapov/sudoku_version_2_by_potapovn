@@ -1,5 +1,6 @@
-from PyQt5 import QtCore, QtWidgets
+from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QWidget, QTableWidgetItem
+from settings import ICON_PATH
 import datetime
 
 
@@ -7,6 +8,9 @@ class SelectedSudokuLeadersWindowUiForm(object):
     def setupUi(self, Form):
         Form.setObjectName("Form")
         Form.resize(380, 300)
+
+        Form.setWindowIcon(QtGui.QIcon(ICON_PATH))
+
         self.verticalLayout = QtWidgets.QVBoxLayout(Form)
         self.verticalLayout.setObjectName("verticalLayout")
         self.table = QtWidgets.QTableWidget(Form)

@@ -9,16 +9,22 @@ from settings import COLOR_OF_SUDOKU_CONSTANT_CELLS
 from settings import COLOR_OF_SUDOKU_DYNAMIC_CELLS
 from settings import SHOW_SUDOKU_SOLVED_MATRIX
 
+from settings import ICON_PATH
+
 IN_GAME = 0
 PAUSE = 1
 SOLVED = 2
 EXIT = 3
+EXIT_TO_PARENT_WINDOW = 4
 
 
 class GameWindowUiForm(object):
     def setupUi(self, Form):
         Form.setObjectName("Form")
         Form.resize(498, 499)
+
+        Form.setWindowIcon(QtGui.QIcon(ICON_PATH))
+
         self.verticalLayout = QtWidgets.QVBoxLayout(Form)
         self.verticalLayout.setObjectName("verticalLayout")
         self.horizontalLayout = QtWidgets.QHBoxLayout()
@@ -90,8 +96,8 @@ class GameWindow(GameWindowUiForm, QWidget):
         self.return_to_parent_window()
 
     def return_to_parent_window(self):
+        self.game_status = EXIT_TO_PARENT_WINDOW
         self.close()
-        self.parent_window.show()
 
     def save_game(self):
         if self.db_cursor is None:
@@ -117,6 +123,9 @@ class GameWindow(GameWindowUiForm, QWidget):
     def save_game_question_message_box(self, event):
         self.game_status = PAUSE
         messagebox = QMessageBox()
+
+        messagebox.setWindowIcon(QtGui.QIcon(ICON_PATH))
+
         messagebox.setIcon(QMessageBox.Information)
         messagebox.setWindowTitle('Выход')
         messagebox.setText('Сохранить игру перед выходом?')
@@ -138,6 +147,9 @@ class GameWindow(GameWindowUiForm, QWidget):
 
     def save_record_question_message_box(self, event):
         messagebox = QMessageBox()
+
+        messagebox.setWindowIcon(QtGui.QIcon(ICON_PATH))
+
         messagebox.setIcon(QMessageBox.Information)
         messagebox.setWindowTitle('Выход')
         messagebox.setText('Сохранить рекорд перед выходом?')
@@ -156,6 +168,7 @@ class GameWindow(GameWindowUiForm, QWidget):
             self.parent_window.show()
         elif clicked_button == btn_exit_cancelled:
             event.ignore()
+            self.game_status = IN_GAME
 
     def timer_tick(self):
         if self.game_status == IN_GAME:
@@ -298,4 +311,5 @@ class GameWindow(GameWindowUiForm, QWidget):
             self.save_game_question_message_box(event)
         elif self.game_status == SOLVED:
             self.save_record_question_message_box(event)
-
+        elif self.game_status == EXIT_TO_PARENT_WINDOW:
+            self.parent_window.show()

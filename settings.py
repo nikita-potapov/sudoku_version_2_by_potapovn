@@ -1,3 +1,16 @@
+import sys
+import os
+
+
+def resource_path(relative_path):
+    try:
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+
+    return os.path.join(base_path, relative_path)
+
+
 # Настройки уровней сложности
 # {название}: ({название в базе данных}, (минимум оставшихся ячеек, максимум оставшихся ячеек))
 DIFFICULT_LEVELS = {
@@ -56,3 +69,9 @@ COLOR_OF_SUDOKU_CONSTANT_CELLS = '#000000'
 COLOR_OF_SUDOKU_DYNAMIC_CELLS = '#4a90e2'
 # Показывать решение судоку в консоли
 SHOW_SUDOKU_SOLVED_MATRIX = True
+
+# Путь до иконки
+ICON_PATH = 'img\\icon.png'
+
+################################
+ICON_PATH = resource_path(ICON_PATH)

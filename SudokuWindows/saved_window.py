@@ -4,11 +4,16 @@ from sudoku_database_cursor import SudokuDatabaseCursor
 from .game_window import GameWindow
 import datetime
 
+from settings import ICON_PATH
+
 
 class SavedGamesWindowUiForm(object):
     def setupUi(self, Form):
         Form.setObjectName("Form")
         Form.resize(380, 540)
+
+        Form.setWindowIcon(QtGui.QIcon(ICON_PATH))
+
         self.verticalLayout = QtWidgets.QVBoxLayout(Form)
         self.verticalLayout.setObjectName("verticalLayout")
         self.horizontalLayout = QtWidgets.QHBoxLayout()

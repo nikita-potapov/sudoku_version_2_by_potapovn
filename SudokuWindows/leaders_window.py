@@ -6,13 +6,19 @@ from .game_window import GameWindow
 from settings import DIFFICULT_LEVELS
 import datetime
 
+from settings import ICON_PATH
+
 NORMAL = 0
 EXIT = 1
+
 
 class LeadersWindowUiForm(object):
     def setupUi(self, Form):
         Form.setObjectName("Form")
         Form.resize(380, 540)
+
+        Form.setWindowIcon(QtGui.QIcon(ICON_PATH))
+
         self.verticalLayout = QtWidgets.QVBoxLayout(Form)
         self.verticalLayout.setObjectName("verticalLayout")
         self.horizontalLayout = QtWidgets.QHBoxLayout()
@@ -186,4 +192,3 @@ class LeadersWindow(LeadersWindowUiForm, QWidget):
             self.parent_window.show()
         if self.child_window is not None:
             self.child_window.close()
-

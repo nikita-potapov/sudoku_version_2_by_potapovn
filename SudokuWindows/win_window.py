@@ -1,11 +1,16 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QWidget
 
+from settings import ICON_PATH
+
 
 class WinWindowUiForm(object):
     def setupUi(self, Form):
         Form.setObjectName("Form")
         Form.resize(531, 160)
+
+        Form.setWindowIcon(QtGui.QIcon(ICON_PATH))
+
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred,
                                            QtWidgets.QSizePolicy.Maximum)
         sizePolicy.setHorizontalStretch(0)
