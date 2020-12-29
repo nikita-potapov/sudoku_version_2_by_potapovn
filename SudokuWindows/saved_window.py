@@ -8,7 +8,7 @@ import datetime
 class SavedGamesWindowUiForm(object):
     def setupUi(self, Form):
         Form.setObjectName("Form")
-        Form.resize(400, 300)
+        Form.resize(380, 540)
         self.verticalLayout = QtWidgets.QVBoxLayout(Form)
         self.verticalLayout.setObjectName("verticalLayout")
         self.horizontalLayout = QtWidgets.QHBoxLayout()
@@ -87,6 +87,8 @@ class SavedGamesWindow(SavedGamesWindowUiForm, QWidget):
                         seconds = int(value)
                         minutes = seconds // 60
                         hours = minutes // 60
+                        seconds = seconds % 60
+                        minutes = minutes % 60
 
                         w = [hours, minutes, seconds]
                         value = ':'.join([str(x).rjust(2, '0') for x in w])

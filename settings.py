@@ -49,7 +49,6 @@ CREATE TABLE saved_games (
 # Количество миллисекунд в одной игровой секунде
 GAME_TIMER_SECOND = 1000
 
-
 # Настройки интерфейса
 # Цвет неизменяемых ячеек судоку
 COLOR_OF_SUDOKU_CONSTANT_CELLS = '#000000'

@@ -11,7 +11,7 @@ from sudoku_database_cursor import SudokuDatabaseCursor
 class InitialWindowUiForm(object):
     def setupUi(self, Form):
         Form.setObjectName("Form")
-        Form.resize(384, 541)
+        Form.resize(380, 540)
         self.horizontalLayout = QtWidgets.QHBoxLayout(Form)
         self.horizontalLayout.setObjectName("horizontalLayout")
         spacerItem = QtWidgets.QSpacerItem(122, 20, QtWidgets.QSizePolicy.Expanding,
@@ -93,7 +93,7 @@ class InitialWindowUiForm(object):
                 setText(_translate("Form", difficult_level_name))
         self.btn_saved_games.setText(_translate("From", "Сохранения"))
         self.btn_back_to_main_menu.setText(_translate("Form", "Назад"))
-        self.btn_leaders_table.setText(_translate("Form", "Таблица рекордов"))
+        self.btn_leaders_table.setText(_translate("Form", "Рекорды"))
         self.btn_exit.setText(_translate("Form", "Выход"))
 
 

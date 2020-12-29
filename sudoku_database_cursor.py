@@ -104,6 +104,23 @@ class SudokuDatabaseCursor:
         database_cursor.execute(query)
         self.database_connection.commit()
 
+    def get_all_records_games(self, difficult_level_name):
+        database_cursor = self.database_connection.cursor()
+
+        query = f"""SELECT * FROM records WHERE difficult_level_name LIKE
+         '%{difficult_level_name}%'"""
+        result = list(database_cursor.execute(query).fetchall())
+
+        return result
+
+    def get_records_games_by_sudoku_id(self, database_sudoku_id):
+        database_cursor = self.database_connection.cursor()
+
+        query = f"""SELECT * FROM records WHERE matrix_id = {database_sudoku_id}"""
+        result = list(database_cursor.execute(query).fetchall())
+
+        return result
+
     def delete_saved_game(self, saved_game_id):
         database_cursor = self.database_connection.cursor()
 
@@ -177,3 +194,6 @@ class SudokuDatabaseCursor:
 
     def _convert_string_to_matrix(self, string):
         return [[int(x) for x in row.split('-')] for row in string.split('=')]
+
+    def __del__(self):
+        self.database_connection.close()
