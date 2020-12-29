@@ -66,15 +66,16 @@ class InitialWindowUiForm(object):
         self.btn_leaders_table.setMinimumSize(QtCore.QSize(0, 30))
         self.btn_leaders_table.setObjectName("btn_records_table")
         self.verticalLayout.addWidget(self.btn_leaders_table)
-        self.btn_exit = QtWidgets.QPushButton(Form)
-        self.btn_exit.setMinimumSize(QtCore.QSize(0, 30))
-        self.btn_exit.setObjectName("btn_exit")
-        self.verticalLayout.addWidget(self.btn_exit)
 
         self.btn_about = QtWidgets.QPushButton(Form)
         self.btn_about.setMinimumSize(QtCore.QSize(0, 30))
         self.btn_about.setObjectName("btn_about")
         self.verticalLayout.addWidget(self.btn_about)
+
+        self.btn_exit = QtWidgets.QPushButton(Form)
+        self.btn_exit.setMinimumSize(QtCore.QSize(0, 30))
+        self.btn_exit.setObjectName("btn_exit")
+        self.verticalLayout.addWidget(self.btn_exit)
 
         self.progress_bar = QtWidgets.QProgressBar(Form)
         self.progress_bar.setTextVisible(False)
