@@ -167,8 +167,6 @@ class InitialWindow(InitialWindowUiForm, QWidget):
         self.hide_some_buttons()
 
     def btn_exit_clicked(self):
-        # TODO
-        # Тут потом что-то будем делать перед закрытием
         self.close()
 
     def btn_leaders_table_clicked(self):
