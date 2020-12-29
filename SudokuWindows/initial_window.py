@@ -7,6 +7,7 @@ from .game_window import GameWindow
 from sudoku_interface import Sudoku
 from sudoku_database_cursor import SudokuDatabaseCursor
 from settings import ICON_PATH
+from settings import PROGRAM_VERSION
 
 
 class InitialWindowUiForm(object):
@@ -70,6 +71,11 @@ class InitialWindowUiForm(object):
         self.btn_exit.setObjectName("btn_exit")
         self.verticalLayout.addWidget(self.btn_exit)
 
+        self.btn_about = QtWidgets.QPushButton(Form)
+        self.btn_about.setMinimumSize(QtCore.QSize(0, 30))
+        self.btn_about.setObjectName("btn_about")
+        self.verticalLayout.addWidget(self.btn_about)
+
         self.progress_bar = QtWidgets.QProgressBar(Form)
         self.progress_bar.setTextVisible(False)
         self.progress_bar.setObjectName("progress_bar")
@@ -99,6 +105,7 @@ class InitialWindowUiForm(object):
         self.btn_back_to_main_menu.setText(_translate("Form", "Назад"))
         self.btn_leaders_table.setText(_translate("Form", "Рекорды"))
         self.btn_exit.setText(_translate("Form", "Выход"))
+        self.btn_about.setText(_translate("Form", "О программе"))
 
 
 class InitialWindow(InitialWindowUiForm, QWidget):
@@ -114,6 +121,9 @@ class InitialWindow(InitialWindowUiForm, QWidget):
         self.progress_bar.hide()
         # Просто счетчик
         self.counter = 0
+
+        # Кнопка "О программе"
+        self.btn_about.clicked.connect(self.btn_about_clicked)
 
         # Изначально кнопки выбора сложности и нопка "Назад" скрыты
         self.hide_some_buttons()
@@ -179,6 +189,14 @@ class InitialWindow(InitialWindowUiForm, QWidget):
     def progress_bar_set_value(self, value: int):
         self.progress_bar.setValue(value)
 
+    def btn_about_clicked(self):
+        QtWidgets.QMessageBox.about(self, 'О программе', f'Судоку {PROGRAM_VERSION}\n'
+                                                         'Разработчик:\n'
+                                                         'Потапов Н. С.\n'
+                                                         'проект Яндекс.лицей\n'
+                                                         '2020 год'
+                                    )
+
     def hide_some_buttons(self):
         """Скрывает кнопки выбора сложности для новой игры и кнопку 'Назад',
         и показывает обратно кнопки 'Выход' и 'Таблица рекордов'"""
@@ -190,6 +208,7 @@ class InitialWindow(InitialWindowUiForm, QWidget):
         self.btn_leaders_table.show()
         self.btn_new_game.show()
         self.btn_saved_games.show()
+        self.btn_about.show()
 
     def show_some_buttons(self):
         """Показывает кнопки выбора сложности для новой игры и кнопку 'Назад',
@@ -202,3 +221,4 @@ class InitialWindow(InitialWindowUiForm, QWidget):
         self.btn_leaders_table.hide()
         self.btn_new_game.hide()
         self.btn_saved_games.hide()
+        self.btn_about.hide()

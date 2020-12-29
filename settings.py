@@ -21,6 +21,8 @@ DIFFICULT_LEVELS = {
 # Максимальное количество попыток генерации судоку при пересечении минимальной сложности
 SUDOKU_GENERATION_MAX_ATTEMPTS = 1000
 
+PROGRAM_VERSION = 1.0
+
 # Папка с базой данных
 DATABASE_FOLDER = 'db'
 # Название файла с базой данных
