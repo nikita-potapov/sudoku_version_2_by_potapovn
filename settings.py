@@ -11,6 +11,9 @@ def resource_path(relative_path):
     return os.path.join(base_path, relative_path)
 
 
+# Включает режим дебага с кнопкой "Выиграть" в окне игры
+DEBUG_MODE = False
+
 # Настройки уровней сложности
 # {название}: ({название в базе данных}, (минимум оставшихся ячеек, максимум оставшихся ячеек))
 DIFFICULT_LEVELS = {

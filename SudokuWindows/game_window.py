@@ -10,6 +10,7 @@ from settings import COLOR_OF_SUDOKU_DYNAMIC_CELLS
 from settings import SHOW_SUDOKU_SOLVED_MATRIX
 
 from settings import ICON_PATH
+from settings import DEBUG_MODE
 
 IN_GAME = 0
 PAUSE = 1
@@ -37,6 +38,12 @@ class GameWindowUiForm(object):
                                            QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout.addItem(spacerItem)
 
+        self.btn_hard_win = QtWidgets.QPushButton(Form)
+        self.btn_hard_win.setMinimumSize(QtCore.QSize(0, 10))
+        self.btn_hard_win.setObjectName("btn_hard_win")
+        self.horizontalLayout.addWidget(self.btn_hard_win)
+        self.btn_hard_win.hide()
+
         self.btn_game_timer = QtWidgets.QPushButton(Form)
         self.btn_game_timer.setMinimumSize(QtCore.QSize(0, 10))
         self.btn_game_timer.setObjectName("btn_game_timer")
@@ -54,6 +61,7 @@ class GameWindowUiForm(object):
         Form.setWindowTitle(_translate("Form", "Судоку"))
         self.btn_back.setText(_translate("Form", "В главное меню"))
         self.btn_game_timer.setText(_translate("Form", ""))
+        self.btn_hard_win.setText(_translate("Form", "Выиграть"))
 
 
 class GameWindow(GameWindowUiForm, QWidget):
@@ -66,6 +74,10 @@ class GameWindow(GameWindowUiForm, QWidget):
 
         if SHOW_SUDOKU_SOLVED_MATRIX:
             sudoku.show_solved_matrix()
+
+        if DEBUG_MODE:
+            self.btn_hard_win.show()
+            self.btn_hard_win.clicked.connect(self.btn_hard_win_clicked)
 
         current_sudoku_matrix = sudoku.get_current_sudoku_state()
         if current_sudoku_matrix is None:
@@ -120,7 +132,7 @@ class GameWindow(GameWindowUiForm, QWidget):
         if ok_pressed:
             self.sudoku.set_game_time(self.game_time)
             self.db_cursor.add_game_record(self.sudoku, player_name)
-            self.game_status = EXIT
+            self.game_status = EXIT_TO_PARENT_WINDOW
             self.return_to_parent_window()
 
     def save_game_question_message_box(self, event):
@@ -309,10 +321,16 @@ class GameWindow(GameWindowUiForm, QWidget):
     def check_win(self):
         return self.current_sudoku_state == self.sudoku.get_solved_matrix()
 
+    def btn_hard_win_clicked(self):
+        if self.game_status == IN_GAME:
+            self.game_status = SOLVED
+            self.disable_sudoku()
+            self.save_record()
+
     def closeEvent(self, event: QtGui.QCloseEvent) -> None:
         if self.game_status not in [SOLVED, EXIT]:
             self.save_game_question_message_box(event)
-        elif self.game_status == SOLVED:
-            self.save_record_question_message_box(event)
         elif self.game_status == EXIT_TO_PARENT_WINDOW:
             self.parent_window.show()
+        elif self.game_status == SOLVED:
+            self.save_record_question_message_box(event)

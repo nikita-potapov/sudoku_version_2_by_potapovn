@@ -71,6 +71,3 @@ class SelectedSudokuLeadersWindow(SelectedSudokuLeadersWindowUiForm, QWidget):
                 table.hideColumn(col)
             else:
                 table.showColumn(col)
-
-
-
