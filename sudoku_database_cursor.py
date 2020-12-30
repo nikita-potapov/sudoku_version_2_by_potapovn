@@ -44,7 +44,7 @@ class SudokuDatabaseCursor:
         database_cursor = self.database_connection.cursor()
 
         query = """SELECT saved_timestamp, game_time, difficult_level_name,
-                        id, matrix_id, matrix_state FROM saved_games"""
+                        id, matrix_id, matrix_state FROM saved_games ORDER BY saved_timestamp DESC"""
         result = list(database_cursor.execute(query).fetchall())
 
         return result
@@ -108,7 +108,7 @@ class SudokuDatabaseCursor:
         database_cursor = self.database_connection.cursor()
 
         query = f"""SELECT * FROM records WHERE difficult_level_name LIKE
-         '%{difficult_level_name}%'"""
+         '%{difficult_level_name}%' ORDER BY saved_timestamp DESC"""
         result = list(database_cursor.execute(query).fetchall())
 
         return result

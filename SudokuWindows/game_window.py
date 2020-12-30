@@ -15,9 +15,7 @@ from settings import DEBUG_MODE
 IN_GAME = 0
 PAUSE = 1
 SOLVED = 2
-EXIT = 3
-EXIT_TO_PARENT_WINDOW = 4
-
+SAVED = 3
 
 class GameWindowUiForm(object):
     def setupUi(self, Form):
@@ -108,10 +106,6 @@ class GameWindow(GameWindowUiForm, QWidget):
         self.btn_back.clicked.connect(self.btn_back_clicked)
 
     def btn_back_clicked(self):
-        self.return_to_parent_window()
-
-    def return_to_parent_window(self):
-        self.game_status = EXIT_TO_PARENT_WINDOW
         self.close()
 
     def save_game(self):
@@ -132,10 +126,11 @@ class GameWindow(GameWindowUiForm, QWidget):
         if ok_pressed:
             self.sudoku.set_game_time(self.game_time)
             self.db_cursor.add_game_record(self.sudoku, player_name)
-            self.game_status = EXIT_TO_PARENT_WINDOW
-            self.return_to_parent_window()
+            return True
 
-    def save_game_question_message_box(self, event):
+        return False
+
+    def save_game_question_message_box(self):
         self.game_status = PAUSE
         messagebox = QMessageBox()
 
@@ -152,15 +147,14 @@ class GameWindow(GameWindowUiForm, QWidget):
         clicked_button = messagebox.clickedButton()
         if clicked_button == btn_exit_with_save:
             self.save_game()
-            self.parent_window.show()
+            return True
         elif clicked_button == btn_exit_without_save:
-            self.game_status = EXIT
-            self.parent_window.show()
+            return False
         elif clicked_button == btn_exit_cancelled:
-            event.ignore()
             self.game_status = IN_GAME
+            return None
 
-    def save_record_question_message_box(self, event):
+    def save_record_question_message_box(self):
         messagebox = QMessageBox()
 
         messagebox.setWindowIcon(QtGui.QIcon(ICON_PATH))
@@ -176,14 +170,15 @@ class GameWindow(GameWindowUiForm, QWidget):
         clicked_button = messagebox.clickedButton()
 
         if clicked_button == btn_exit_with_save:
-            self.save_record()
-            self.parent_window.show()
+            if self.save_record():
+                return True
+            return None
+
         elif clicked_button == btn_exit_without_save:
-            self.game_status = EXIT
-            self.parent_window.show()
+            return False
+
         elif clicked_button == btn_exit_cancelled:
-            event.ignore()
-            self.game_status = IN_GAME
+            return None
 
     def timer_tick(self):
         if self.game_status == IN_GAME:
@@ -322,15 +317,24 @@ class GameWindow(GameWindowUiForm, QWidget):
         return self.current_sudoku_state == self.sudoku.get_solved_matrix()
 
     def btn_hard_win_clicked(self):
-        if self.game_status == IN_GAME:
-            self.game_status = SOLVED
-            self.disable_sudoku()
-            self.save_record()
+        self.game_status = SOLVED
+        self.disable_sudoku()
+        if self.save_record():
+            self.game_status = SAVED
+            self.close()
 
     def closeEvent(self, event: QtGui.QCloseEvent) -> None:
-        if self.game_status not in [SOLVED, EXIT]:
-            self.save_game_question_message_box(event)
-        elif self.game_status == EXIT_TO_PARENT_WINDOW:
+        result = None
+
+        if self.game_status == SOLVED:
+            result = self.save_record_question_message_box()
+        elif self.game_status == IN_GAME:
+            result = self.save_game_question_message_box()
+        elif self.game_status == SAVED:
+            result = True
+
+        if result is not None:
             self.parent_window.show()
-        elif self.game_status == SOLVED:
-            self.save_record_question_message_box(event)
+            event.accept()
+        else:
+            event.ignore()

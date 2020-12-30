@@ -114,7 +114,7 @@ class LeadersWindow(LeadersWindowUiForm, QWidget):
                 records_by_sudoku.get(sudoku_database_id, []) + [record]
 
         self.best_of_records = [min(values,
-                                    key=lambda x: (-x[1], x[2])) for values in
+                                    key=lambda x: (x[1], x[2])) for values in
                                 records_by_sudoku.values()]
         table = self.table
 

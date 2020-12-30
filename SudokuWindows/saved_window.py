@@ -31,7 +31,6 @@ class SavedGamesWindowUiForm(object):
         self.table = QtWidgets.QTableWidget(Form)
         self.table.setSelectionMode(QtWidgets.QAbstractItemView.SingleSelection)
         self.table.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectRows)
-        self.table.setSortingEnabled(True)
         self.table.setObjectName("table")
         self.table.setColumnCount(0)
         self.table.setRowCount(0)
@@ -102,6 +101,9 @@ class SavedGamesWindow(SavedGamesWindowUiForm, QWidget):
                     item = QTableWidgetItem(str(value))
                     table.setItem(i, j, item)
 
+            for col in range(len(saved_games[0])):
+                table.showColumn(col)
+
             for col in range(4, 6):
                 table.hideColumn(col)
 
@@ -111,7 +113,9 @@ class SavedGamesWindow(SavedGamesWindowUiForm, QWidget):
     def btn_delete_saved_game_clicked(self):
         current = list(self.table.selectedItems())
         if current:
+            print(*[x.text() for x in current])
             database_saved_game_id = int(current[3].text())
+            print(database_saved_game_id)
             self.db_cursor.delete_saved_game(database_saved_game_id)
             self.update_saved_games_table()
 
