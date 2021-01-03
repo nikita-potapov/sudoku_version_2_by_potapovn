@@ -57,6 +57,8 @@ class SelectedSudokuLeadersWindow(SelectedSudokuLeadersWindowUiForm, QWidget):
                     seconds = int(value)
                     minutes = seconds // 60
                     hours = minutes // 60
+                    minutes = minutes % 60
+                    seconds = seconds % 60
 
                     w = [hours, minutes, seconds]
                     value = ':'.join([str(x).rjust(2, '0') for x in w])

@@ -114,7 +114,7 @@ class LeadersWindow(LeadersWindowUiForm, QWidget):
                 records_by_sudoku.get(sudoku_database_id, []) + [record]
 
         self.best_of_records = [min(values,
-                                    key=lambda x: (-x[1], x[2])) for values in
+                                    key=lambda x: (x[2], -x[1])) for values in
                                 records_by_sudoku.values()]
         table = self.table
 
@@ -170,7 +170,7 @@ class LeadersWindow(LeadersWindowUiForm, QWidget):
             database_sudoku_id = int(self.best_of_records[row][4])
             records = self.db_cursor.get_records_games_by_sudoku_id(database_sudoku_id)
 
-            records.sort(key=lambda x: (-x[2], -x[1]))
+            records.sort(key=lambda x: (x[2], -x[1]))
 
             self.child_window = SelectedSudokuLeadersWindow(self, records)
             self.child_window.show()
