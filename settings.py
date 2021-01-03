@@ -11,8 +11,15 @@ def resource_path(relative_path):
     return os.path.join(base_path, relative_path)
 
 
+PROGRAM_VERSION = 1.0
+# Количество миллисекунд в одной игровой секунде
+GAME_TIMER_SECOND = 1000
 # Включает режим дебага с кнопкой "Выиграть" в окне игры
 DEBUG_MODE = False
+# Показывать решение судоку в консоли
+SHOW_SUDOKU_SOLVED_MATRIX = False
+# Показывать информацию при генерации судоку в консоли
+SHOW_SUDOKU_GENERATION_INFORMATION = False
 
 # Настройки уровней сложности
 # {название}: ({название в базе данных}, (минимум оставшихся ячеек, максимум оставшихся ячеек))
@@ -21,12 +28,8 @@ DIFFICULT_LEVELS = {
     'Средне': ('STANDARD', (25, 30)),
     'Сложно': ('HARD', (20, 25))
 }
-# Максимальное количество попыток генерации судоку при пересечении минимальной сложности
+# Максимальное количество попыток генерации судоку при дстижении минимальной сложности
 SUDOKU_GENERATION_MAX_ATTEMPTS = 1000
-# Показывать информацию при генерации судоку в консоли
-SHOW_SUDOKU_GENERATION_INFORMATION = True
-
-PROGRAM_VERSION = 1.0
 
 # Папка с базой данных
 DATABASE_FOLDER = 'db'
@@ -66,16 +69,12 @@ CREATE TABLE saved_games (
 );
 
 """
-# Количество миллисекунд в одной игровой секунде
-GAME_TIMER_SECOND = 1000
 
 # Настройки интерфейса
 # Цвет неизменяемых ячеек судоку
 COLOR_OF_SUDOKU_CONSTANT_CELLS = '#000000'
 # Цвет изменяемых ячеек судоку
 COLOR_OF_SUDOKU_DYNAMIC_CELLS = '#4a90e2'
-# Показывать решение судоку в консоли
-SHOW_SUDOKU_SOLVED_MATRIX = True
 
 # Путь до иконки
 ICON_PATH = 'img\\icon.png'
