@@ -1,3 +1,4 @@
 /db/
 /venv/
-/executable/
+/executable/build
+/executable/main.spec
