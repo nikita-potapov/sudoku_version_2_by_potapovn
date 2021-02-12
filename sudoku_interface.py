@@ -7,6 +7,10 @@ from settings import SUDOKU_GENERATION_MAX_ATTEMPTS
 from settings import SHOW_SUDOKU_GENERATION_INFORMATION
 
 
+# Алгоритм X для решения судоку
+# https://www.cs.mcgill.ca/~aassaf9/python/algorithm_x.html
+# Автор: Ali Assaf <ali.assaf.mail@gmail.com>
+#######################################
 def solve_sudoku(size, grid):
     """Интерпретация алгоритма X для решения судоку"""
     grid = copy.deepcopy(grid)
@@ -88,6 +92,8 @@ def deselect(x_set, y_set, row, cols):
                 if k != j:
                     x_set[k].add(i)
 
+
+##########################################
 
 class Sudoku:
     """Класс матрицы для судоку"""
