@@ -3,6 +3,9 @@ import os
 
 
 def resource_path(relative_path):
+    """
+    Функция для подхвата изображений в EXE файл
+    """
     try:
         base_path = sys._MEIPASS
     except Exception:
@@ -15,7 +18,7 @@ PROGRAM_VERSION = 1.0
 # Количество миллисекунд в одной игровой секунде
 GAME_TIMER_SECOND = 1000
 # Включает режим дебага с кнопкой "Выиграть" в окне игры
-DEBUG_MODE = False
+DEBUG_MODE = True
 # Показывать решение судоку в консоли
 SHOW_SUDOKU_SOLVED_MATRIX = False
 # Показывать информацию при генерации судоку в консоли

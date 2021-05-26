@@ -1,13 +1,19 @@
 import os
 import sqlite3
 import datetime
+from sudoku_interface import Sudoku
+
 from settings import DATABASE_FOLDER
 from settings import DATABASE_FILENAME
 from settings import DATABASE_INITIALIZE_SCRIPT
-from sudoku_interface import Sudoku
 
 
 class SudokuDatabaseCursor:
+    """
+    Класс курсора для базы данных.
+    Если потребуется перейти на другую базу данных,
+    то необходимо будет внести правки только в этом классе.
+    """
     def __init__(self):
         self.database_connection = None
 

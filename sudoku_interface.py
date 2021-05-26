@@ -21,6 +21,7 @@ def solve_sudoku(size, grid):
              [("cn", cn) for cn in product(range(cells_count), range(1, cells_count + 1))] +
              [("bn", bn) for bn in product(range(cells_count), range(1, cells_count + 1))])
     y_set = dict()
+
     for r, c, n in product(range(cells_count), range(cells_count), range(1, cells_count + 1)):
         b = (r // rows_count) * rows_count + (c // colums_count)
         y_set[(r, c, n)] = [
@@ -98,12 +99,20 @@ def deselect(x_set, y_set, row, cols):
 class Sudoku:
     """Класс матрицы для судоку"""
 
-    def __init__(self, size=3, level=None,
-                 solved_sudoku=None, problem_sudoku=None,
-                 animate_function=None, database_id=None,
-                 current_sudoku_state=None, game_time=None):
-        """Параметр size задает размер квадратов, на которые разбивается матрица,
-        то есть конечная матрица будет иметь размер size ** 2 на size ** 2"""
+    def __init__(self,
+                 size=3,
+                 level=None,
+                 game_time=None,
+                 database_id=None,
+                 solved_sudoku=None,
+                 problem_sudoku=None,
+                 animate_function=None,
+                 current_sudoku_state=None
+                 ):
+        """
+        Параметр size задает размер квадратов, на которые разбивается матрица,
+        то есть конечная матрица будет иметь размер size ** 2 на size ** 2
+        """
         self.game_time = game_time
         self.current_sudoku_state = current_sudoku_state
         self.database_id = database_id
@@ -115,29 +124,39 @@ class Sudoku:
         self.constant = True if self.solved_sudoku else False
 
     def initialize_matrix(self):
+        """
+        Инициализирует решенную и нерешенную матрицу
+        """
         self.solved_sudoku = []
         self.problem_sudoku = []
 
     def generate_initial_district(self, shift):
-        """Генерирует и возвращает начальный район из self.size квадратных блоков со сдвигом shift"""
+        """
+        Генерирует и возвращает начальный район из self.size квадратных блоков со сдвигом shift
+        """
         initial_row = [i + 1 for i in range(self.size ** 2)]
         district = [initial_row[i * self.size + shift:] +
                     initial_row[:i * self.size + shift] for i in range(self.size)]
         return district
 
     def generate_initial_matrix(self):
-        """Генерирует заполненную матрицу судоку"""
+        """
+        Генерирует заполненную матрицу судоку
+        """
         self.initialize_matrix()
         for i in range(self.size):
             self.solved_sudoku += self.generate_initial_district(i)
 
     def transpose_matrix(self):
-        """Транспонирует матрицу"""
-
+        """
+        Транспонирует матрицу
+        """
         self.solved_sudoku = list(map(list, zip(*copy.deepcopy(self.solved_sudoku))))
 
     def change_rows(self):
-        """Обменивает две случайные строки внутри одного района"""
+        """
+        Обменивает две случайные строки внутри одного района
+        """
         start = random.choice(range(self.size))
         variants = list(range(start * self.size, start * self.size + self.size))
         random.shuffle(variants)
@@ -147,13 +166,17 @@ class Sudoku:
                                                                 self.solved_sudoku[first]
 
     def change_cols(self):
-        """Обменивает два случайных столбца внутри одного района"""
+        """
+        Обменивает два случайных столбца внутри одного района
+        """
         self.transpose_matrix()
         self.change_rows()
         self.transpose_matrix()
 
     def change_row_districts(self):
-        """Обменивает два случайных горизонтальных района"""
+        """
+        Обменивает два случайных горизонтальных района
+        """
         variants = list(range(self.size))
         first = random.choice(variants)
         variants.remove(first)
@@ -167,14 +190,18 @@ class Sudoku:
                                                              first * self.size + i]
 
     def change_col_districts(self):
-        """Обменивает два случайных вертикальных района"""
+        """
+        Обменивает два случайных вертикальных района
+        """
         self.transpose_matrix()
         self.change_row_districts()
         self.transpose_matrix()
 
     def random_mix_matrix(self, k=20):
-        """Совершает k случайных действий над матрицей,
-         не приводящих к недопустимым позициям"""
+        """
+        Совершает k случайных действий над матрицей,
+        не приводящих к недопустимым позициям
+        """
         mix_functions = [self.transpose_matrix,
                          self.change_rows,
                          self.change_cols,
@@ -186,7 +213,9 @@ class Sudoku:
             mix_function()
 
     def _show_matrix_as_sudoku(self, showed_matrix):
-        """Выводит матрицу в консоль в виде судоку"""
+        """
+        Выводит матрицу в консоль в виде судоку
+        """
         showed_matrix = copy.deepcopy(showed_matrix)
         number_of_symbols = len(str(self.size ** 2))
         for i, row in enumerate(showed_matrix):
@@ -198,7 +227,9 @@ class Sudoku:
         print()
 
     def show_solved_matrix(self, as_matrix=False):
-        """Выводит решенную матрицу в консоль"""
+        """
+        Выводит решенную матрицу в консоль
+        """
         if as_matrix:
             for row in self.solved_sudoku:
                 print(row)
@@ -206,7 +237,9 @@ class Sudoku:
             self._show_matrix_as_sudoku(self.solved_sudoku)
 
     def show_problem_matrix(self, as_matrix=False):
-        """Выводит нерешенную матрицу в консоль"""
+        """
+        Выводит нерешенную матрицу в консоль
+        """
         if as_matrix:
             for row in self.solved_sudoku:
                 print(row)
@@ -214,14 +247,18 @@ class Sudoku:
             self._show_matrix_as_sudoku(self.problem_sudoku)
 
     def set_sudoku_size(self, size):
-        """Устанавливает новый размер судоку матрицы,
-         генерирует новую матрицу"""
+        """
+        Устанавливает новый размер судоку матрицы,
+        генерирует новую матрицу
+        """
         self.size = size
 
     def generate_sudoku(self, difficult_level_name):
-        """Генерирует и возвращает судоку определенного уровня сложности difficult,
+        """
+        Генерирует и возвращает судоку определенного уровня сложности difficult,
         представленным в виде кортежа наименьшего и наибольшего возможного
-        количества оставшихся на поле клеток"""
+        количества оставшихся на поле клеток
+        """
         if not self.constant:
             self.difficult_level_name = difficult_level_name
 
@@ -280,6 +317,9 @@ class Sudoku:
                     break
 
             if SHOW_SUDOKU_GENERATION_INFORMATION:
+                """
+                Если задано настройками - то выводит в консоль информацию о процессе генерации поля
+                """
                 print('Max Target:', difficult_max, 'Max Founded:', maximum_difficult,
                       'Current:', current_difficult, 'Attempt', attempts)
 
@@ -290,34 +330,55 @@ class Sudoku:
         return problem_sudoku
 
     def get_solved_matrix(self):
-        """Возвращает копию текущей заполненной матрицы"""
+        """
+        Возвращает копию текущей заполненной матрицы
+        """
         return copy.deepcopy(self.solved_sudoku)
 
     def get_problem_matrix(self):
-        """Возвращает копию текущей незаполненной матрицы"""
+        """
+        Возвращает копию текущей незаполненной матрицы
+        """
         return copy.deepcopy(self.problem_sudoku)
 
     def get_difficult_level_name(self):
-        """Возвращает название уровня сложнсоти"""
+        """
+        Возвращает название уровня сложнсоти
+        """
         return self.difficult_level_name
 
     def get_size(self):
-        """Возвращает размер самого маленького квадрата судоку"""
+        """
+        Возвращает размер самого маленького квадрата судоку
+        """
         return self.size
 
     def get_database_id(self):
-        """Возвращает номер записи этого судоку в базе данных"""
+        """
+        Возвращает номер записи этого судоку в базе данных
+        """
         return self.database_id
 
     def get_current_sudoku_state(self):
-        """Возвращает текущее состояние судоку у игрока"""
+        """
+        Возвращает текущее состояние судоку у игрока
+        """
         return self.current_sudoku_state
 
     def set_current_sudoku_state(self, matrix):
+        """
+        Устанавливает новое состояние игрового поля
+        """
         self.current_sudoku_state = copy.deepcopy(matrix)
 
     def get_game_time(self):
+        """
+        Возвращает время игры
+        """
         return self.game_time
 
     def set_game_time(self, game_time):
+        """
+        Устанавливает новое время игры
+        """
         self.game_time = game_time
