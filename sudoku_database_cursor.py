@@ -14,12 +14,16 @@ class SudokuDatabaseCursor:
     Если потребуется перейти на другую базу данных,
     то необходимо будет внести правки только в этом классе.
     """
+
     def __init__(self):
         self.database_connection = None
 
         self._is_database_exist()
 
     def add_sudoku_matrix(self, sudoku):
+        """
+        Добавляет матрицу судоку sudoku в базу данных в таблицу matrixes
+        """
         database_cursor = self.database_connection.cursor()
 
         saved_timestamp = datetime.datetime.timestamp(datetime.datetime.now())
@@ -47,6 +51,9 @@ class SudokuDatabaseCursor:
         self.database_connection.commit()
 
     def get_saved_games(self):
+        """
+        Получает и возвращает все сохраненные игры из базы данных в порядке сохранения
+        """
         database_cursor = self.database_connection.cursor()
 
         query = """SELECT saved_timestamp, game_time, difficult_level_name,
@@ -56,6 +63,9 @@ class SudokuDatabaseCursor:
         return result
 
     def add_game_record(self, sudoku, player_name):
+        """
+        Добавляет рекорд в базу данных
+        """
         database_cursor = self.database_connection.cursor()
         game_time = sudoku.get_game_time()
         saved_timestamp = datetime.datetime.timestamp(datetime.datetime.now())
@@ -83,6 +93,9 @@ class SudokuDatabaseCursor:
         self.database_connection.commit()
 
     def add_game_save(self, sudoku):
+        """
+        Добавляет сохранение в базу данных
+        """
         database_cursor = self.database_connection.cursor()
         game_time = sudoku.get_game_time()
         saved_timestamp = datetime.datetime.timestamp(datetime.datetime.now())
@@ -111,6 +124,10 @@ class SudokuDatabaseCursor:
         self.database_connection.commit()
 
     def get_all_records_games(self, difficult_level_name):
+        """
+        Получает и возвращает все рекорды по определенному
+        уровню сложности difficult_level_name
+        """
         database_cursor = self.database_connection.cursor()
 
         query = f"""SELECT * FROM records WHERE difficult_level_name LIKE
@@ -120,6 +137,10 @@ class SudokuDatabaseCursor:
         return result
 
     def get_records_games_by_sudoku_id(self, database_sudoku_id):
+        """
+        Получает и возвращает рекорды по определенному
+        id матрицы судоку в базе данных
+        """
         database_cursor = self.database_connection.cursor()
 
         query = f"""SELECT * FROM records WHERE matrix_id = {database_sudoku_id}"""
@@ -128,6 +149,9 @@ class SudokuDatabaseCursor:
         return result
 
     def delete_saved_game(self, saved_game_id):
+        """
+        Удаляет сохранение игры по id из базы данных
+        """
         database_cursor = self.database_connection.cursor()
 
         query = f"""DELETE FROM saved_games WHERE id == {saved_game_id}"""
@@ -136,6 +160,9 @@ class SudokuDatabaseCursor:
         self.database_connection.commit()
 
     def get_saved_game(self, saved_game_id):
+        """
+        Получает и возвращает сохраненную игру по id из базы данных
+        """
         database_cursor = self.database_connection.cursor()
 
         query = f"""SELECT * FROM saved_games WHERE id == {saved_game_id}"""
@@ -143,6 +170,9 @@ class SudokuDatabaseCursor:
         return result
 
     def get_sudoku(self, database_sudoku_id):
+        """
+        Получает и возвращает матрицу судоку по id матрицы из базы данных
+        """
         database_cursor = self.database_connection.cursor()
 
         query = f"""SELECT * FROM matrixes WHERE id == {database_sudoku_id}"""
@@ -155,6 +185,9 @@ class SudokuDatabaseCursor:
         return sudoku
 
     def get_last_sudoku(self):
+        """
+        Получает и возвращает последнюю сгенерированную матрицу судоку
+        """
         database_cursor = self.database_connection.cursor()
 
         query = """SELECT * FROM matrixes ORDER BY id DESC"""
@@ -165,22 +198,31 @@ class SudokuDatabaseCursor:
                       database_id=matrix[0])
 
     def convert_str_to_list(self, string):
+        """
+        Возвращает преобразованный список из строки
+        """
         return self._convert_string_to_matrix(string)
 
     def _connect_database(self):
-        """Коннектится к базе, создает курсор"""
+        """
+        Коннектится к базе данных, создает курсор
+        """
         self.database_connection = sqlite3.connect(
             '\\'.join([DATABASE_FOLDER, DATABASE_FILENAME]))
 
     def _initialize_database(self):
-        """Коннектится и нициализирует базу данных"""
+        """
+        Коннектится и нициализирует базу данных
+        """
         self._connect_database()
         database_cursor = self.database_connection.cursor()
         database_cursor.executescript(DATABASE_INITIALIZE_SCRIPT)
 
     def _is_database_exist(self):
-        """Проверяет, существует ли база данных,
-         если нет - создает новую, вызвав _initialize_database"""
+        """
+        Проверяет, существует ли база данных,
+        если нет - создает новую, вызвав _initialize_database
+        """
         current_folder = next(os.walk(os.getcwd()))
         _, sub_folders, _ = current_folder
         if DATABASE_FOLDER in sub_folders:
@@ -196,10 +238,19 @@ class SudokuDatabaseCursor:
             self._initialize_database()
 
     def _convert_matrix_to_string(self, matrix):
+        """
+        Конвертирует список списков (матрицу судоку) в строку для базы данных и возвращает ее
+        """
         return '='.join(['-'.join(map(str, row)) for row in matrix])
 
     def _convert_string_to_matrix(self, string):
+        """
+        Конвертирует строку из базы данных обратно в список списков
+        """
         return [[int(x) for x in row.split('-')] for row in string.split('=')]
 
     def __del__(self):
+        """
+        При удалении объекта этого класса закрывается подключение к базе данных
+        """
         self.database_connection.close()
