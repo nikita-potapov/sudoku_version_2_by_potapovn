@@ -1,7 +1,9 @@
+import datetime
+
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QWidget, QTableWidgetItem
+
 from settings import ICON_PATH
-import datetime
 
 
 class SelectedSudokuLeadersWindowUiForm(object):
@@ -39,6 +41,9 @@ class SelectedSudokuLeadersWindow(SelectedSudokuLeadersWindowUiForm, QWidget):
         self.update_records_table()
 
     def update_records_table(self):
+        """
+        Обновляет таблицу рекордов по текущему судоку
+        """
         table = self.table
         table.setColumnCount(len(self.records[0]))
         table.setHorizontalHeaderLabels(['ID',
