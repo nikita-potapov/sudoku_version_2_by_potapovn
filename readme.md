@@ -15,7 +15,7 @@
 Для того, чтобы не изобретать велосипед, в проекте для генерации валидных  
 судоку матриц (с единственным решением) используется  
 [интерпретация](https://www.cs.mcgill.ca/~aassaf9/python/algorithm_x.html) "[Алгоритма X](https://en.wikipedia.org/wiki/Knuth%27s_Algorithm_X)" 
-за авторством Ali Assaf
+за авторством Ali Assaf <ali.assaf.mail@gmail.com>
 
 ***
 
