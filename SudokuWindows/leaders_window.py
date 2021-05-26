@@ -1,10 +1,12 @@
+import datetime
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QWidget, QTableWidgetItem
+
+from .game_window import GameWindow
 from sudoku_database_cursor import SudokuDatabaseCursor
 from .selected_sudoku_leaders_window import SelectedSudokuLeadersWindow
-from .game_window import GameWindow
+
 from settings import DIFFICULT_LEVELS
-import datetime
 
 from settings import ICON_PATH
 
@@ -72,6 +74,9 @@ class LeadersWindowUiForm(object):
 
 
 class LeadersWindow(LeadersWindowUiForm, QWidget):
+    """
+    Класс окна с таблицей лидеров
+    """
     def __init__(self, parent_window):
         super(LeadersWindowUiForm, self).__init__()
         self.parent_window = parent_window
@@ -100,6 +105,9 @@ class LeadersWindow(LeadersWindowUiForm, QWidget):
         self.update_records_table()
 
     def update_records_table(self):
+        """
+        Обновляет таблицу лидеров
+        """
         difficult_level_name = self.selector_difficult.currentText()
         if difficult_level_name == 'Сложность':
             difficult_level_name = ''
@@ -157,13 +165,22 @@ class LeadersWindow(LeadersWindowUiForm, QWidget):
                     table.showColumn(col)
 
     def btn_back_clicked(self):
+        """
+        Отрабатывает при нажатии кнопки "Назад"
+        """
         self.return_to_parent_window()
 
     def return_to_parent_window(self):
+        """
+        Возвращаемся в родительское окно
+        """
         self.parent_window.show()
         self.close()
 
     def btn_show_rang_clicked(self):
+        """
+        Отрабатывает при нажатии кнопки "Смотреть ранг"
+        """
         current = list(self.table.selectedItems())
         if current:
             row = current[0].row()
@@ -176,6 +193,9 @@ class LeadersWindow(LeadersWindowUiForm, QWidget):
             self.child_window.show()
 
     def btn_play_again_clicked(self):
+        """
+        Отрабатывает при нажатии кнопки "Играть снова"
+        """
         current = list(self.table.selectedItems())
         if current:
             row = current[0].row()
@@ -188,6 +208,9 @@ class LeadersWindow(LeadersWindowUiForm, QWidget):
             self.game_window.show()
 
     def closeEvent(self, a0: QtGui.QCloseEvent) -> None:
+        """
+        Срабатывает при закрытии окна
+        """
         if self.status == NORMAL:
             self.parent_window.show()
         if self.child_window is not None:
