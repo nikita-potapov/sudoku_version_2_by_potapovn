@@ -11,8 +11,8 @@ from sudoku_interface import Sudoku
 from sudoku_database_cursor import SudokuDatabaseCursor
 
 from settings import ICON_PATH
+from settings import DEBUG_MODE
 from settings import PROGRAM_VERSION
-
 
 class InitialWindowUiForm(object):
     def setupUi(self, Form):
@@ -99,7 +99,7 @@ class InitialWindowUiForm(object):
 
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
-        Form.setWindowTitle(_translate("Form", "Судоку"))
+        Form.setWindowTitle(_translate("Form", "Судоку" + (' (DEBUG MODE)' if DEBUG_MODE else '')))
         self.label_title.setText(_translate("Form", "Судоку"))
         self.btn_new_game.setText(_translate("Form", "Новая игра"))
 

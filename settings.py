@@ -1,5 +1,5 @@
-import sys
 import os
+import sys
 
 
 def resource_path(relative_path):
@@ -20,7 +20,7 @@ PROGRAM_VERSION = 1.0
 GAME_TIMER_SECOND = 1000
 
 # Включает режим дебага с кнопкой "Выиграть" в окне игры
-DEBUG_MODE = True
+DEBUG_MODE = False
 
 # Показывать решение судоку в консоли
 SHOW_SUDOKU_SOLVED_MATRIX = False
@@ -80,7 +80,7 @@ CREATE TABLE saved_games (
 
 """
 
-# Настройки интерфейса
+# Настройки интерфейса:
 
 # Цвет неизменяемых ячеек судоку
 COLOR_OF_SUDOKU_CONSTANT_CELLS = '#000000'
