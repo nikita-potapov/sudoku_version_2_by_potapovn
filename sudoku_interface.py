@@ -1,6 +1,6 @@
-from itertools import product
-import random
 import copy
+import random
+from itertools import product
 
 from settings import DIFFICULT_LEVELS
 from settings import SUDOKU_GENERATION_MAX_ATTEMPTS
@@ -9,7 +9,7 @@ from settings import SHOW_SUDOKU_GENERATION_INFORMATION
 
 # Алгоритм X для решения судоку
 # https://www.cs.mcgill.ca/~aassaf9/python/algorithm_x.html
-# Автор: Ali Assaf <ali.assaf.mail@gmail.com>
+# Автор алгоритма: Ali Assaf <ali.assaf.mail@gmail.com>
 #######################################
 def solve_sudoku(size, grid):
     """Интерпретация алгоритма X для решения судоку"""
@@ -125,7 +125,7 @@ class Sudoku:
 
     def initialize_matrix(self):
         """
-        Инициализирует решенную и нерешенную матрицу
+        Инициализирует заполненную и незаполненную матрицу
         """
         self.solved_sudoku = []
         self.problem_sudoku = []
@@ -228,7 +228,7 @@ class Sudoku:
 
     def show_solved_matrix(self, as_matrix=False):
         """
-        Выводит решенную матрицу в консоль
+        Выводит заполненную матрицу в консоль
         """
         if as_matrix:
             for row in self.solved_sudoku:
@@ -238,7 +238,7 @@ class Sudoku:
 
     def show_problem_matrix(self, as_matrix=False):
         """
-        Выводит нерешенную матрицу в консоль
+        Выводит незаполненную матрицу в консоль
         """
         if as_matrix:
             for row in self.solved_sudoku:
@@ -255,9 +255,8 @@ class Sudoku:
 
     def generate_sudoku(self, difficult_level_name):
         """
-        Генерирует и возвращает судоку определенного уровня сложности difficult,
-        представленным в виде кортежа наименьшего и наибольшего возможного
-        количества оставшихся на поле клеток
+        Генерирует и возвращает судоку уровня сложности difficult_level_name
+        (уровни сложности задаются в файле settings.py)
         """
         if not self.constant:
             self.difficult_level_name = difficult_level_name
@@ -355,7 +354,7 @@ class Sudoku:
 
     def get_database_id(self):
         """
-        Возвращает номер записи этого судоку в базе данных
+        Возвращает id записи этого судоку в базе данных
         """
         return self.database_id
 
@@ -367,7 +366,7 @@ class Sudoku:
 
     def set_current_sudoku_state(self, matrix):
         """
-        Устанавливает новое состояние игрового поля
+        Устанавливает новое состояние судоку
         """
         self.current_sudoku_state = copy.deepcopy(matrix)
 
