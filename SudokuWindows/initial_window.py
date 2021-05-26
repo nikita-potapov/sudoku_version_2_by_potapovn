@@ -1,11 +1,15 @@
-from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QWidget
+from PyQt5 import QtCore, QtGui, QtWidgets
+
 from settings import DIFFICULT_LEVELS
+
+from .game_window import GameWindow
 from .leaders_window import LeadersWindow
 from .saved_window import SavedGamesWindow
-from .game_window import GameWindow
+
 from sudoku_interface import Sudoku
 from sudoku_database_cursor import SudokuDatabaseCursor
+
 from settings import ICON_PATH
 from settings import PROGRAM_VERSION
 
@@ -120,7 +124,7 @@ class InitialWindow(InitialWindowUiForm, QWidget):
 
         # progress_bar по умолчанию скрыт
         self.progress_bar.hide()
-        # Просто счетчик
+        # Счетчик для progress_bar
         self.counter = 0
 
         # Кнопка "О программе"
@@ -142,9 +146,17 @@ class InitialWindow(InitialWindowUiForm, QWidget):
             btn.clicked.connect(self.btn_new_game_difficult_level_clicked)
 
     def btn_new_game_clicked(self):
+        """
+        Показывает кнопки выбора сложности
+        Срабатывает при нажатии кнопки "Новая игра"
+        """
         self.show_some_buttons()
 
     def btn_new_game_difficult_level_clicked(self):
+        """
+        Запускает процесс создания нового судоку
+        Срабатывает при нажатии кнопки выбора сложности
+        """
         if self.db_cursor is None:
             self.db_cursor = SudokuDatabaseCursor()
 
@@ -164,41 +176,69 @@ class InitialWindow(InitialWindowUiForm, QWidget):
         self.hide_some_buttons()
 
     def btn_back_to_main_menu_clicked(self):
+        """
+        Срабатывает при нажатии кнопки "Назад"
+        Скрывает кнопки выбора сложности
+        """
         self.hide_some_buttons()
 
     def btn_exit_clicked(self):
+        """
+        Закрытие приложения
+        """
         self.close()
 
     def btn_leaders_table_clicked(self):
+        """
+        Показывает окно таблицы лидеров
+        """
         self.hide()
         self.child_window = LeadersWindow(self)
         self.child_window.show()
 
     def btn_saved_games_clicked(self):
+        """
+        Показывает окно сохраненных игр
+        """
         self.child_window = SavedGamesWindow(self)
         self.child_window.show()
         self.hide()
 
     def hide_progress_bar(self):
+        """
+        Скрывает progress_bar
+        """
         self.progress_bar.hide()
 
     def show_progress_bar(self):
+        """
+        Показывает progress_bar
+        """
         self.progress_bar.show()
 
     def progress_bar_set_value(self, value: int):
+        """
+        Устанавливает значение progress_bar равным value
+        """
         self.progress_bar.setValue(value)
 
     def btn_about_clicked(self):
-        QtWidgets.QMessageBox.about(self, 'О программе', f'Судоку {PROGRAM_VERSION}\n'
-                                                         'Разработчик:\n'
-                                                         'Потапов Н. С.\n'
-                                                         'проект Яндекс.лицей\n'
-                                                         '2020 год'
+        """
+        Показывает окно информации о приложении
+        """
+        QtWidgets.QMessageBox.about(self, 'О программе',
+                                    f'Судоку {PROGRAM_VERSION}\n'
+                                    'Разработчик:\n'
+                                    'ФИО скрыто\n'
+                                    'проект Яндекс.лицей\n'
+                                    '2020 год'
                                     )
 
     def hide_some_buttons(self):
-        """Скрывает кнопки выбора сложности для новой игры и кнопку 'Назад',
-        и показывает обратно кнопки 'Выход' и 'Таблица рекордов'"""
+        """
+        Скрывает кнопки выбора сложности для новой игры и кнопку 'Назад',
+        и показывает обратно кнопки 'Выход' и 'Таблица рекордов'
+        """
         for btn in self.new_game_difficult_levels_buttons:
             btn.hide()
         self.btn_back_to_main_menu.hide()
@@ -210,8 +250,10 @@ class InitialWindow(InitialWindowUiForm, QWidget):
         self.btn_about.show()
 
     def show_some_buttons(self):
-        """Показывает кнопки выбора сложности для новой игры и кнопку 'Назад',
-        и скрывает кнопки 'Выход' и 'Таблица рекордов'"""
+        """
+        Показывает кнопки выбора сложности для новой игры и кнопку 'Назад',
+        и скрывает кнопки 'Выход' и 'Таблица рекордов'
+        """
         for btn in self.new_game_difficult_levels_buttons:
             btn.show()
         self.btn_back_to_main_menu.show()
