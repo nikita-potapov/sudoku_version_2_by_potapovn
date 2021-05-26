@@ -1,8 +1,9 @@
+import datetime
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QWidget, QTableWidgetItem
 from sudoku_database_cursor import SudokuDatabaseCursor
+
 from .game_window import GameWindow
-import datetime
 
 from settings import ICON_PATH
 
@@ -49,6 +50,9 @@ class SavedGamesWindowUiForm(object):
 
 
 class SavedGamesWindow(SavedGamesWindowUiForm, QWidget):
+    """
+    Класс окна сохраненных игр
+    """
     def __init__(self, parent_window):
         super(SavedGamesWindow, self).__init__()
         self.parent_window = parent_window
@@ -69,6 +73,9 @@ class SavedGamesWindow(SavedGamesWindowUiForm, QWidget):
         self.btn_play_saved_game.clicked.connect(self.btn_play_saved_game_clicked)
 
     def update_saved_games_table(self):
+        """
+        Обновляет таблицу сохраненных игр
+        """
         saved_games = self.db_cursor.get_saved_games()
 
         table = self.table
@@ -108,9 +115,15 @@ class SavedGamesWindow(SavedGamesWindowUiForm, QWidget):
                 table.hideColumn(col)
 
     def btn_back_clicked(self):
+        """
+        Отрабатывает по нажатию кнопки "Назад"
+        """
         self.close()
 
     def btn_delete_saved_game_clicked(self):
+        """
+        Удаляет выделенное в таблице сохранение из базы данных и обновляет таблицу
+        """
         current = list(self.table.selectedItems())
         if current:
             print(*[x.text() for x in current])
@@ -120,6 +133,9 @@ class SavedGamesWindow(SavedGamesWindowUiForm, QWidget):
             self.update_saved_games_table()
 
     def btn_play_saved_game_clicked(self):
+        """
+        Запускает сохраненную игру
+        """
         current = list(self.table.selectedItems())
         if current:
             database_saved_game_id = int(current[-1].text())
@@ -135,5 +151,11 @@ class SavedGamesWindow(SavedGamesWindowUiForm, QWidget):
             self.child_window.show()
 
     def closeEvent(self, a0: QtGui.QCloseEvent) -> None:
+        """
+        Отрабатывает при закрытии этого окна
+        """
+        # Показываем родительское окно
         self.parent_window.show()
+
+        # Закрываем текущее окно
         self.close()
