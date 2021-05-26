@@ -1,13 +1,13 @@
+from PyQt5.QtCore import QTimer
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QWidget, QMessageBox, QInputDialog, QLineEdit
-from PyQt5.QtCore import QTimer
 
 from sudoku_database_cursor import SudokuDatabaseCursor
 
 from settings import GAME_TIMER_SECOND
-from settings import COLOR_OF_SUDOKU_CONSTANT_CELLS
-from settings import COLOR_OF_SUDOKU_DYNAMIC_CELLS
 from settings import SHOW_SUDOKU_SOLVED_MATRIX
+from settings import COLOR_OF_SUDOKU_DYNAMIC_CELLS
+from settings import COLOR_OF_SUDOKU_CONSTANT_CELLS
 
 from settings import ICON_PATH
 from settings import DEBUG_MODE
@@ -64,6 +64,9 @@ class GameWindowUiForm(object):
 
 
 class GameWindow(GameWindowUiForm, QWidget):
+    """
+    Класс окна игры
+    """
     def __init__(self, parent_window, sudoku):
         super(GameWindowUiForm, self).__init__()
         self.sudoku = sudoku
@@ -107,9 +110,15 @@ class GameWindow(GameWindowUiForm, QWidget):
         self.btn_back.clicked.connect(self.btn_back_clicked)
 
     def btn_back_clicked(self):
+        """
+        Срабатывает по нажатию кнопки "Назад"
+        """
         self.close()
 
     def save_game(self):
+        """
+        Сохраняет игру
+        """
         if self.db_cursor is None:
             self.db_cursor = SudokuDatabaseCursor()
         self.sudoku.set_current_sudoku_state(self.current_sudoku_state)
@@ -117,6 +126,9 @@ class GameWindow(GameWindowUiForm, QWidget):
         self.db_cursor.add_game_save(self.sudoku)
 
     def save_record(self):
+        """
+        Сохраняет рекорд
+        """
         if self.db_cursor is None:
             self.db_cursor = SudokuDatabaseCursor()
 
@@ -132,6 +144,9 @@ class GameWindow(GameWindowUiForm, QWidget):
         return False
 
     def save_game_question_message_box(self):
+        """
+        Показывает диалог сохранения игры
+        """
         self.game_status = PAUSE
         messagebox = QMessageBox()
 
@@ -156,6 +171,9 @@ class GameWindow(GameWindowUiForm, QWidget):
             return None
 
     def save_record_question_message_box(self):
+        """
+        Показывает диалог сохранения рекрода
+        """
         messagebox = QMessageBox()
 
         messagebox.setWindowIcon(QtGui.QIcon(ICON_PATH))
@@ -182,11 +200,17 @@ class GameWindow(GameWindowUiForm, QWidget):
             return None
 
     def timer_tick(self):
+        """
+        Инкрементирует игровой таймер
+        """
         if self.game_status == IN_GAME:
             self.game_time += 1
             self.update_game_time()
 
     def update_game_time(self):
+        """
+        Обновляет игровое время в окне
+        """
         seconds = self.game_time
         minutes = seconds // 60
         hours = minutes // 60
@@ -204,6 +228,10 @@ class GameWindow(GameWindowUiForm, QWidget):
         self.btn_game_timer.setText(timer.strip())
 
     def btn_game_timer_clicked(self):
+        """
+        Срабатывает при нажатии на таймер:
+            устанавливает паузу и продолжает игру
+        """
         if self.game_status == IN_GAME:
             self.game_status = PAUSE
             self.cover_sudoku(True)
@@ -212,6 +240,9 @@ class GameWindow(GameWindowUiForm, QWidget):
             self.cover_sudoku(False)
 
     def cover_sudoku(self, covered):
+        """
+        Скрывает или показывает судоку
+        """
         for i in range(self.sudoku_size ** 2):
             for j in range(self.sudoku_size ** 2):
                 if covered:
@@ -244,12 +275,18 @@ class GameWindow(GameWindowUiForm, QWidget):
                         )
 
     def disable_sudoku(self):
+        """
+        Устанавливает нужный цвет неактивных ячеек
+        """
         for i in range(self.sudoku_size ** 2):
             for j in range(self.sudoku_size ** 2):
                 getattr(self, f'btn_{i}_{j}').setDisabled(True)
                 getattr(self, f'btn_{i}_{j}').setStyleSheet("background-color: rgb(225, 225, 225);")
 
     def initialize_sudoku_interface(self):
+        """
+        Инициализирует новую игру
+        """
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding,
                                            QtWidgets.QSizePolicy.Expanding)
         sizePolicy.setHorizontalStretch(0)
@@ -297,6 +334,9 @@ class GameWindow(GameWindowUiForm, QWidget):
                 getattr(self, f'btn_{i}_{j}').clicked.connect(self.sudoku_btn_clicked)
 
     def sudoku_btn_clicked(self):
+        """
+        Срабатывает при нажатии на кнопку игрового поля
+        """
         button = self.sender()
         row, col = list(map(int, button.objectName().split('_')[-2:]))
         if self.sudoku.get_problem_matrix()[row][col] == 0:
@@ -310,14 +350,23 @@ class GameWindow(GameWindowUiForm, QWidget):
                 self.save_record()
 
     def update_sudoku_interface(self):
+        """
+        Обновляет состояние и значение всех кнопок игрового поля
+        """
         for i, row in enumerate(self.current_sudoku_state):
             for j, value in enumerate(row):
                 getattr(self, f'btn_{i}_{j}').setText(str(value) if value else ' ')
 
     def check_win(self):
+        """
+        Проверяет судоку на решенность
+        """
         return self.current_sudoku_state == self.sudoku.get_solved_matrix()
 
     def btn_hard_win_clicked(self):
+        """
+        Выигрывает текущую игру (DEBUG MODE)
+        """
         self.game_status = SOLVED
         self.disable_sudoku()
         if self.save_record():
@@ -325,6 +374,10 @@ class GameWindow(GameWindowUiForm, QWidget):
             self.close()
 
     def closeEvent(self, event: QtGui.QCloseEvent) -> None:
+        """
+        Вызывает необходимые диалоги сохранения
+        Срабатывает при закрытии окна
+        """
         result = None
 
         if self.game_status == SOLVED:
