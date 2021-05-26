@@ -13,7 +13,8 @@
 - Возможность взятия реванша
 
 Для того, чтобы не изобретать велосипед, в проекте для генерации валидных  
-судоку матриц используется [интерпретация](https://www.cs.mcgill.ca/~aassaf9/python/algorithm_x.html) "[Алгоритма X](https://en.wikipedia.org/wiki/Knuth%27s_Algorithm_X)" для решения судоку  
+судоку матриц (с единственным решением) используется  
+[интерпретация](https://www.cs.mcgill.ca/~aassaf9/python/algorithm_x.html) "[Алгоритма X](https://en.wikipedia.org/wiki/Knuth%27s_Algorithm_X)" 
 за авторством Ali Assaf
 
 ***
